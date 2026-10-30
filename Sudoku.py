@@ -5,24 +5,23 @@ def print_grid(grid):
 
 def is_valid(grid, row, col, num):
 
-    # Check the row
+    # Check row
     for j in range(9):
-        if grid[row][j] == num:
+        if j != col and grid[row][j] == num:
             return False
 
-    # Check the column
+    # Check column
     for i in range(9):
-        if grid[i][col] == num:
+        if i != row and grid[i][col] == num:
             return False
 
-    # Find the top-left corner of the 3x3 subgrid
+    # Check 3x3 subgrid
     start_row = (row // 3) * 3
     start_col = (col // 3) * 3
 
-    # Check the 3x3 subgrid
     for i in range(start_row, start_row + 3):
         for j in range(start_col, start_col + 3):
-            if grid[i][j] == num:
+            if (i, j) != (row, col) and grid[i][j] == num:
                 return False
 
     return True
@@ -30,58 +29,68 @@ def is_valid(grid, row, col, num):
 
 def solve_sudoku(grid):
 
-    # Find an empty cell
+    # Find empty cell
     for row in range(9):
         for col in range(9):
 
-            if grid[row][col] == 0:
+            if grid[row][col] == -1:
 
-                # Try digits 1 through 9
                 for num in range(1, 10):
 
                     if is_valid(grid, row, col, num):
 
-                        # Place the number
                         grid[row][col] = num
 
-                        # Solve the remaining puzzle
                         if solve_sudoku(grid):
                             return True
 
-                        # Backtrack if the choice fails
-                        grid[row][col] = 0
+                        # Backtracking
+                        grid[row][col] = -1
 
-                # No number works in this cell
                 return False
 
-    # No empty cells remain
     return True
 
 
-# Take input from the user
-print("Enter the Sudoku grid row by row.")
-print("Use 0 for empty cells.")
+# Take input
+print("Enter Sudoku (-1 for empty cells):")
 
 grid = []
 
 for i in range(9):
     while True:
-        row = list(map(
-            int,
-            input(f"Enter row {i + 1} (9 digits separated by spaces): ").split()
-        ))
+        row = list(map(int, input(f"Row {i+1}: ").split()))
 
-        if len(row) == 9 and all(0 <= x <= 9 for x in row):
+        if len(row) == 9 and all(-1 <= x <= 9 for x in row):
             grid.append(row)
             break
 
-        print("Invalid input. Enter exactly 9 digits from 0 to 9.")
+        print("Enter exactly 9 numbers between 0 and 9.")
 
-print("\nOriginal Sudoku:")
-print_grid(grid)
+# Validate original Sudoku
+valid = True
 
-if solve_sudoku(grid):
-    print("\nSolved Sudoku:")
-    print_grid(grid)
+for i in range(9):
+    for j in range(9):
+        num = grid[i][j]
+
+        if num != -1:
+            if not is_valid(grid, i, j, num):
+                valid = False
+                break
+
+    if not valid:
+        break
+
+if not valid:
+    print("Invalid Sudoku! Duplicate numbers found.")
+
 else:
-    print("\nNo solution exists for this Sudoku.")
+    print("\nOriginal Sudoku:")
+    print_grid(grid)
+
+    if solve_sudoku(grid):
+        print("\nSolved Sudoku:")
+        print_grid(grid)
+    else:
+        print("\nNo solution exists!")
