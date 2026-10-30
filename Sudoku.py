@@ -65,7 +65,7 @@ for i in range(9):
             grid.append(row)
             break
 
-        print("Enter exactly 9 numbers between 0 and 9.")
+        print("Enter exactly 9 numbers between -1 and 9.")
 
 # Validate original Sudoku
 valid = True
@@ -86,11 +86,31 @@ if not valid:
     print("Invalid Sudoku! Duplicate numbers found.")
 
 else:
-    print("\nOriginal Sudoku:")
-    print_grid(grid)
-
     if solve_sudoku(grid):
         print("\nSolved Sudoku:")
         print_grid(grid)
     else:
         print("\nNo solution exists!")
+
+# OUTPUT
+# Enter Sudoku (-1 for empty cells):
+# Row 1: 5 3 -1 -1 7 -1 -1 -1 -1
+# Row 2: 6 -1 -1 1 9 5 -1 -1 -1
+# Row 3: -1 9 8 -1 -1 -1 -1 6 -1
+# Row 4: 8 -1 -1 -1 6 -1 -1 -1 3
+# Row 5: 4 -1 -1 8 -1 3 -1 -1 1
+# Row 6: 7 -1 -1 -1 2 -1 -1 -1 6
+# Row 7: -1 6 -1 -1 -1 -1 2 8 -1
+# Row 8: -1 -1 -1 4 1 9 -1 -1 5
+# Row 9: -1 -1 -1 -1 8 -1 -1 7 9
+
+# Solved Sudoku:
+# 5 3 4 6 7 8 9 1 2
+# 6 7 2 1 9 5 3 4 8
+# 1 9 8 3 4 2 5 6 7
+# 8 5 9 7 6 1 4 2 3
+# 4 2 6 8 5 3 7 9 1
+# 7 1 3 9 2 4 8 5 6
+# 9 6 1 5 3 7 2 8 4
+# 2 8 7 4 1 9 6 3 5
+# 3 4 5 2 8 6 1 7 9
